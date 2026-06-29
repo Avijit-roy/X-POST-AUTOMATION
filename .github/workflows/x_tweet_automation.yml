@@ -17,8 +17,8 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-          cache: 'pip'
+          python-version: "3.11"
+          cache: "pip"
 
       - name: Install dependencies
         run: |
@@ -51,9 +51,18 @@ jobs:
           fi
 
       - name: Write Google Service Account Credentials
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
         run: |
           mkdir -p credentials
-          echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}" > credentials/service-account.json
+          printf '%s' "$GOOGLE_SERVICE_ACCOUNT_JSON" > credentials/service-account.json
+          python - <<'PY'
+import json
+from pathlib import Path
+data = Path('credentials/service-account.json').read_text()
+json.loads(data)
+print('✅ GOOGLE_SERVICE_ACCOUNT_JSON is valid JSON')
+PY
 
       - name: Run Automation Script
         env:
