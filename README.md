@@ -1,7 +1,5 @@
 # 🤖 X AI Daily Tweet Automation
 
-![Project Banner](https://via.placeholder.com/1200x320.png?text=X+AI+Daily+Tweet+Automation)
-
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?style=for-the-badge&logo=python)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](#license)
 [![Built with](https://img.shields.io/badge/Built%20with-Groq%20%2B%20Tavily%20%2B%20Tweepy-FF6B6B?style=for-the-badge)](https://github.com/)
