@@ -1,0 +1,70 @@
+name: X Auto Tweet
+
+on:
+  workflow_dispatch: # Allows manual triggering from the GitHub Actions UI
+  # schedule:
+  #   - cron: '0 10 * * *' # Uncomment to run automatically daily at 10:00 UTC (15:30 IST)
+
+jobs:
+  tweet:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Playwright Browsers
+        run: |
+          npx playwright install --with-deps chromium
+
+      - name: Restore X session cache
+        id: cache-x-session
+        uses: actions/cache@v4
+        with:
+          path: .x_session.json
+          key: x-session-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            x-session-${{ runner.os }}-
+
+      - name: Write Google Service Account Credentials
+        run: |
+          mkdir -p credentials
+          echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}" > credentials/service-account.json
+
+      - name: Run Automation Script
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+          POLLINATIONS_API_KEY: ${{ secrets.POLLINATIONS_API_KEY }}
+          X_USERNAME: ${{ secrets.X_USERNAME }}
+          X_PASSWORD: ${{ secrets.X_PASSWORD }}
+          X_EMAIL: ${{ secrets.X_EMAIL }}
+          GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+          GOOGLE_CREDENTIALS_FILE: credentials/service-account.json
+          SHEET_NAME: "Tweets for x"
+          GMAIL_SENDER: ${{ secrets.GMAIL_SENDER }}
+          GMAIL_RECEIVER: ${{ secrets.GMAIL_RECEIVER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          MAX_RETRIES: 3
+          QUALITY_MIN_SCORE: 6
+        run: python main.py
+
+      - name: Upload error screenshot
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: error-screenshot
+          path: logs/x_error.png
+          if-no-files-found: ignore

@@ -1,0 +1,11 @@
+# X (Twitter) AI Daily Tweet Automation — Dependencies
+# Install with: pip install -r requirements.txt
+
+requests==2.31.0        # HTTP client for all API calls
+playwright              # Browser automation for free X posting (no API needed)
+schedule==1.2.1         # Daily job scheduler
+gspread==6.0.2          # Google Sheets read/write
+google-auth==2.50.0     # Google Service Account authentication
+google-auth-oauthlib    # OAuth2 helpers for google-auth
+Pillow==11.1.0          # Image processing
+python-dotenv==1.0.1    # Load environment variables from .env file

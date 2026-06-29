@@ -1,0 +1,22 @@
+# ── Secrets & Credentials ─────────────────────────────
+credentials/
+.env
+.env.local
+
+# ── Logs ──────────────────────────────────────────────
+logs/
+*.log
+
+# ── Python Cache ──────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# ── OS Files ──────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── X Session File ────────────────────────────────────
+.x_session.json
+
