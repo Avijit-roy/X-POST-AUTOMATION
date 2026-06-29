@@ -27,7 +27,7 @@ jobs:
 
       - name: Install Playwright Browsers
         run: |
-          npx playwright install --with-deps chromium
+          python -m playwright install --with-deps chromium
 
       - name: Restore X session cache
         id: cache-x-session
