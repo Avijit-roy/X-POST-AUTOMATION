@@ -38,6 +38,18 @@ jobs:
           restore-keys: |
             x-session-${{ runner.os }}-
 
+      - name: Load X session from secret if cache missed
+        if: steps.cache-x-session.outputs.cache-hit != 'true'
+        env:
+          X_SESSION_JSON: ${{ secrets.X_SESSION_JSON }}
+        run: |
+          if [ -n "$X_SESSION_JSON" ]; then
+            echo "$X_SESSION_JSON" > .x_session.json
+            echo "♻️ Loaded X session from repository secrets fallback."
+          else
+            echo "⚠️ No X session secret found, will fall back to raw credentials login."
+          fi
+
       - name: Write Google Service Account Credentials
         run: |
           mkdir -p credentials
