@@ -267,7 +267,8 @@ def log_to_sheet(date, topic, actor, tweet, image_url, score, status):
         ])
         log.info("✅ Logged to Google Sheets")
     except Exception as e:
-        log.warning(f"⚠️ Sheets log failed: {e}")
+        log.exception("⚠️ Sheets log failed")
+        raise
 
 
 # ── Gmail ─────────────────────────────────────────────────────────────────────
@@ -797,6 +798,7 @@ def run_workflow():
             f"Error: {err}\nTopic: {topic}\nCheck logs."
         )
         log_to_sheet(today, topic, actor, "", "", 0, f"ERROR: {err}")
+        raise
 
 
     except Exception as e:
@@ -806,6 +808,7 @@ def run_workflow():
             f"Unexpected error: {e}\nTopic: {topic}\nCheck logs."
         )
         log_to_sheet(today, topic, actor, "", "", 0, f"ERROR: {e}")
+        raise
 
 
 # ── Entry Point ───────────────────────────────────────────────────────────────
